@@ -3,13 +3,14 @@
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
+import logo from '@/assets/Banner.png'
 import { BsMoonStars, BsSun } from "react-icons/bs";
 import { useTheme } from "@heroui/react";
 
 import { FaUser } from "react-icons/fa";
 import { IoMenu} from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
+import Image from "next/image";
 
 interface NavLink {
   label: string;
@@ -66,12 +67,10 @@ export default function Navbarpage(): React.JSX.Element {
         <div className="h-16 px-6 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-500/20 flex items-center justify-center">
-              🍽️
-            </div>
+      
 
             <h1 className="text-lg font-bold text-gray-900 dark:text-white">
-              Recipe<span className="text-orange-500">Hub</span>
+              Trendy<span className="text-green-700">Haat</span>
             </h1>
           </Link>
 
