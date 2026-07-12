@@ -1,5 +1,6 @@
-'use client';
+"use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button, Drawer } from "@heroui/react";
@@ -9,34 +10,53 @@ import {
   BiHeart,
   BiPlusCircle,
 } from "react-icons/bi";
-import { BsFileEarmarkBarGraph, BsHouse, BsPeople, BsPerson } from "react-icons/bs";
+import {
+  BsFileEarmarkBarGraph,
+  BsHouse,
+  BsPeople,
+  BsPerson,
+} from "react-icons/bs";
 import { CgShoppingCart } from "react-icons/cg";
 import { IoMenu } from "react-icons/io5";
-
 import { FiBookOpen } from "react-icons/fi";
 import { AiOutlineTransaction } from "react-icons/ai";
+import { IconType } from "react-icons";
+import { GetUserInserver } from "@/lib/Actions/GetUser";
 
+type UserInfo = NonNullable<
+  Awaited<ReturnType<typeof GetUserInserver>>
+>;
 
-export function SideNavigation({Userinfo:object}) { 
-  
+interface SideNavigationProps {
+  Userinfo: UserInfo;
+}
+
+interface NavItem {
+  href: string;
+  label: string;
+  icon: IconType;
+}
+
+export default function SideNavigation({
+  Userinfo,
+}: SideNavigationProps) {
   const pathname = usePathname();
 
+  const user = Userinfo;
 
-const user =  Userinfo ;
-    console.log( user?.isPremium )
-  const UserNavItems = [
+  const UserNavItems: NavItem[] = [
     {
       href: "/Dashboard/User",
       icon: BsHouse,
       label: "Overview",
     },
     {
-      href:   "/Dashboard/User/addrecipe"  ,
+      href: "/Dashboard/User/addrecipe",
       icon: BiPlusCircle,
       label: "Add Recipe",
     },
     {
-      href:  "/Dashboard/User/Myrecipe",
+      href: "/Dashboard/User/Myrecipe",
       icon: BiBookOpen,
       label: "My Recipes",
     },
@@ -56,82 +76,89 @@ const user =  Userinfo ;
       label: "Profile",
     },
   ];
-  const AdminNavItems = [
-  {
-    href: "/Dashboard/Admin",
-    icon: BsHouse,
-    label: "Overview",
-  },
-  {
-    href: "/Dashboard/Admin/User",
-    icon: BsPeople,
-    label: "Manage User",
-  },
-  {
-    href: "/Dashboard/Admin/Recipes",
-    icon: FiBookOpen,
-    label: "Manage Recipes",
-  },
-  {
-    href: "/Dashboard/Admin/report",
-    icon: BsFileEarmarkBarGraph ,
-    label: "Recipes Report",
-  },
-  {
-    href: "/Dashboard/Admin/Payments",
-    icon: AiOutlineTransaction ,
-    label: "Transaction",
-  },
-  {
-    href: "/Dashboard/Admin/profile",
-    icon: BsPerson,
-    label: "Profile",
-  },
-];
 
- const FinalLinks = user?.role === 'Admin' ? AdminNavItems : UserNavItems ;
+  const AdminNavItems: NavItem[] = [
+    {
+      href: "/Dashboard/Admin",
+      icon: BsHouse,
+      label: "Overview",
+    },
+    {
+      href: "/Dashboard/Admin/User",
+      icon: BsPeople,
+      label: "Manage User",
+    },
+    {
+      href: "/Dashboard/Admin/Recipes",
+      icon: FiBookOpen,
+      label: "Manage Recipes",
+    },
+    {
+      href: "/Dashboard/Admin/report",
+      icon: BsFileEarmarkBarGraph,
+      label: "Recipes Report",
+    },
+    {
+      href: "/Dashboard/Admin/Payments",
+      icon: AiOutlineTransaction,
+      label: "Transaction",
+    },
+    {
+      href: "/Dashboard/Admin/profile",
+      icon: BsPerson,
+      label: "Profile",
+    },
+  ];
+
+  const FinalLinks =
+    user?.role === "Admin" ? AdminNavItems : UserNavItems;
 
   const Navmenu = (
     <div className="w-full">
       <nav className="flex flex-col gap-2">
-
         {/* User Card */}
-       <div className="flex items-center gap-3 p-3 rounded-2xl bg-white dark:bg-black border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white mb-4">
-          
-          <div className="w-15 h-15 rounded-full bg-orange-200 overflow-hidden">
-            <img
+        <div className="mb-4 flex items-center gap-3 rounded-2xl border border-gray-200 bg-white p-3 dark:border-gray-700 dark:bg-zinc-900">
+          <div className="h-16 w-16 overflow-hidden rounded-full bg-gray-200">
+            <Image
               src={user?.image || "/default-avatar.png"}
-              alt="User Image"
-             
+              alt="User"
+              width={64}
+              height={64}
+              className="h-full w-full object-cover"
             />
           </div>
 
           <div>
-            <h1 className="font-semibold text-white">
-             {user?.name}
-            </h1>
-            <p className="text-xs text-white">
+            <h2 className="font-semibold text-gray-900 dark:text-white">
+              {user?.name || "Guest"}
+            </h2>
+
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Welcome back 👋
             </p>
           </div>
         </div>
 
-        {/* Nav Items */}
+        {/* Navigation */}
         {FinalLinks.map((item) => {
-          const isActive = pathname === item.href;
+          const Icon = item.icon;
+
+          const isActive =
+            pathname === item.href ||
+            pathname.startsWith(`${item.href}/`);
 
           return (
             <Link
+              key={item.href}
               href={item.href}
-              key={item.label}
-              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
+              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 ${
                 isActive
-                  ? "bg-orange-100 text-orange-600"
-                  : "text-gray-600 hover:bg-orange-50 hover:text-orange-500"
+                  ? "bg-orange-100 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400"
+                  : "text-gray-600 hover:bg-orange-50 hover:text-orange-500 dark:text-gray-300 dark:hover:bg-zinc-800"
               }`}
             >
-              <item.icon className="text-lg" />
-              {item.label}
+              <Icon className="text-lg" />
+              <span>{item.label}</span>
             </Link>
           );
         })}
@@ -142,33 +169,32 @@ const user =  Userinfo ;
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:block w-64 shrink-0 border-r border-gray-100 p-4 dark:bg-black bg-white">
+      <aside className="hidden w-64 shrink-0 border-r border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-black lg:block">
         {Navmenu}
       </aside>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Sidebar */}
       <Drawer>
-        <Button className="lg:hidden flex items-center gap-3 m-4 dark:bg-black bg-orange-500 text-white">
-         <span><IoMenu /></span> Sidebar
+        <Button className="m-4 flex items-center gap-2 bg-orange-500 text-white lg:hidden">
+          <IoMenu className="text-lg" />
+          Sidebar
         </Button>
 
-        <Drawer.Backdrop>
-          <Drawer.Content placement="left">
-            <Drawer.Dialog className="bg-white">
-              <Drawer.CloseTrigger />
+        <Drawer.Backdrop />
 
-              <Drawer.Header>
-                <Drawer.Heading className="text-gray-800">
-                  Navigation
-                </Drawer.Heading>
-              </Drawer.Header>
+        <Drawer.Content placement="left">
+          <Drawer.Dialog className="bg-white dark:bg-zinc-900">
+            <Drawer.CloseTrigger />
 
-              <Drawer.Body>
-                {Navmenu}
-              </Drawer.Body>
-            </Drawer.Dialog>
-          </Drawer.Content>
-        </Drawer.Backdrop>
+            <Drawer.Header>
+              <Drawer.Heading className="text-gray-900 dark:text-white">
+                Navigation
+              </Drawer.Heading>
+            </Drawer.Header>
+
+            <Drawer.Body>{Navmenu}</Drawer.Body>
+          </Drawer.Dialog>
+        </Drawer.Content>
       </Drawer>
     </>
   );

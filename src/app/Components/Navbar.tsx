@@ -38,6 +38,14 @@ export default function Navbarpage(): React.JSX.Element {
         label: "Browse Product",
         href: "/products",
       },
+      {
+        label: "About Us",
+        href: "/about",
+      },
+      {
+        label: "Contact",
+        href: "/contact",
+      },
     ];
 
     if (user?.role) {
