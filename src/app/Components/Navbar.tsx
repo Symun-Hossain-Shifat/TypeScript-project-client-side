@@ -1,35 +1,32 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import logo from '@/assets/Banner.png'
-import { BsMoonStars, BsSun } from "react-icons/bs";
-import { useTheme } from "@heroui/react";
-
-import { FaUser } from "react-icons/fa";
-import { IoMenu} from "react-icons/io5";
+import { usePathname, useRouter } from "next/navigation";
+import { IoMenu } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
-import Image from "next/image";
+import { authClient } from "@/lib/auth-client";
 
 interface NavLink {
   label: string;
   href: string;
 }
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  image?: string | null;
+  role: string;
+}
+
 export default function Navbarpage(): React.JSX.Element {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
-  const [mounted, setMounted] = useState<boolean>(false);
-
+  const { data: session } = authClient.useSession();
   const pathname = usePathname();
-  const { theme, setTheme } = useTheme();
+  const router = useRouter();
 
-  
-  const user = { role : 'dd'}
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const user = session?.user as User | undefined;
 
   const links = useMemo<NavLink[]>(() => {
     const base: NavLink[] = [
@@ -38,12 +35,12 @@ export default function Navbarpage(): React.JSX.Element {
         href: "/",
       },
       {
-        label: "Browse Recipes",
-        href: "/Recipes",
+        label: "Browse Product",
+        href: "/products",
       },
     ];
 
-    if (user) {
+    if (user?.role) {
       base.push({
         label: "Dashboard",
         href: `/Dashboard/${user.role}`,
@@ -57,20 +54,24 @@ export default function Navbarpage(): React.JSX.Element {
     setMenuOpen((prev) => !prev);
   };
 
-  const toggleTheme = (): void => {
-    setTheme(theme === "dark" ? "light" : "dark");
+  const handleLogout = async () => {
+    try {
+      await authClient.signOut();
+      setMenuOpen(false);
+      router.push("/");
+    } catch (error) {
+      console.error("Failed to log out:", error);
+    }
   };
 
   return (
-    <div className="sticky top-0 z-50 px-4 py-4 bg-white/70 dark:bg-gray-900/70 backdrop-blur-md">
-      <nav className="max-w-7xl mx-auto bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-orange-100 dark:border-gray-700 shadow-sm rounded-3xl">
+    <div className="sticky top-0 z-50 px-4 py-4 bg-black/70 backdrop-blur-md">
+      <nav className="max-w-7xl mx-auto bg-black border border-neutral-800 shadow-xl rounded-3xl">
         <div className="h-16 px-6 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
-      
-
-            <h1 className="text-lg font-bold text-gray-900 dark:text-white">
-              Trendy<span className="text-green-700">Haat</span>
+            <h1 className="text-lg font-bold text-white tracking-wide">
+              Trendy<span className="text-green-500">Haat</span>
             </h1>
           </Link>
 
@@ -78,15 +79,14 @@ export default function Navbarpage(): React.JSX.Element {
           <div className="hidden md:flex items-center gap-2">
             {links.map((link) => {
               const isActive = pathname === link.href;
-
               return (
                 <Link
                   key={link.href}
                   href={link.href}
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
                     isActive
-                      ? "bg-orange-100 text-orange-600"
-                      : "text-gray-600 dark:text-gray-300 hover:text-orange-500 hover:bg-orange-50 dark:hover:bg-gray-700"
+                      ? "bg-neutral-800 text-white"
+                      : "text-neutral-400 hover:text-white hover:bg-neutral-900"
                   }`}
                 >
                   {link.label}
@@ -97,33 +97,18 @@ export default function Navbarpage(): React.JSX.Element {
 
           {/* Right Actions */}
           <div className="flex items-center gap-3">
-            {/* Theme */}
-            {mounted && (
-              <button
-                onClick={toggleTheme}
-                className="hidden md:flex p-2 rounded-xl border border-orange-200 dark:border-gray-600 hover:bg-orange-50 dark:hover:bg-gray-700"
-              >
-                {theme === "dark" ? (
-                  <BsSun className="text-yellow-400" />
-                ) : (
-                  <BsMoonStars />
-                )}
-              </button>
-            )}
-
             {/* Profile/Login */}
             {user ? (
-              <Link
-                href={`/Dashboard/${user.role}/profile`}
-                className="hidden md:flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 hover:text-orange-600 hover:bg-gray-50 dark:hover:bg-gray-700 px-3 py-2 rounded-lg transition-colors"
+              <button 
+                onClick={handleLogout} 
+                className="hidden md:block text-green-400 font-semibold hover:text-green-300 text-sm transition"
               >
-                <FaUser />
-                <span>Profile</span>
-              </Link>
+                Logout
+              </button>
             ) : (
               <Link
                 href="/signin"
-                className="hidden md:flex px-3 py-2 text-sm text-orange-600 hover:bg-orange-50 rounded-lg"
+                className="hidden md:flex px-4 py-2 text-sm font-medium text-white hover:bg-neutral-900 rounded-xl border border-neutral-800 transition"
               >
                 Login
               </Link>
@@ -132,7 +117,8 @@ export default function Navbarpage(): React.JSX.Element {
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMenu}
-              className="md:hidden p-2 rounded-xl hover:bg-orange-50 dark:hover:bg-gray-700"
+              className="md:hidden p-2 rounded-xl hover:bg-neutral-900 text-white transition"
+              aria-label="Toggle Menu"
             >
               {menuOpen ? <IoMdClose size={24} /> : <IoMenu size={24} />}
             </button>
@@ -141,20 +127,19 @@ export default function Navbarpage(): React.JSX.Element {
 
         {/* Mobile Menu */}
         {menuOpen && (
-          <div className="md:hidden border-t border-orange-100 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-4">
+          <div className="md:hidden border-t border-neutral-800 bg-black px-4 py-4 rounded-b-3xl">
             <div className="flex flex-col gap-2">
               {links.map((link) => {
                 const isActive = pathname === link.href;
-
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className={`px-4 py-3 rounded-xl text-sm transition ${
+                    className={`px-4 py-3 rounded-xl text-sm font-medium transition ${
                       isActive
-                        ? "bg-orange-100 text-orange-600"
-                        : "text-gray-700 dark:text-gray-300 hover:bg-orange-50 dark:hover:bg-gray-700"
+                        ? "bg-neutral-800 text-white"
+                        : "text-neutral-300 hover:bg-neutral-900 hover:text-white"
                     }`}
                   >
                     {link.label}
@@ -164,44 +149,22 @@ export default function Navbarpage(): React.JSX.Element {
             </div>
 
             {/* Mobile Auth */}
-            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex flex-col gap-3">
+            <div className="mt-4 pt-4 border-t border-neutral-800 flex flex-col gap-3">
               {user ? (
-                <Link
-                  href={`/Dashboard/${user.role}/profile`}
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-700"
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center justify-center gap-2 px-4 py-3 border border-neutral-800 rounded-xl text-green-400 hover:bg-neutral-900 text-sm font-medium transition"
                 >
-                  <FaUser />
-                  Profile
-                </Link>
+                  Logout
+                </button>
               ) : (
                 <Link
                   href="/signin"
                   onClick={() => setMenuOpen(false)}
-                  className="px-4 py-3 rounded-xl text-center bg-orange-100 text-orange-600"
+                  className="px-4 py-3 rounded-xl text-center bg-white text-black font-semibold text-sm transition hover:bg-neutral-200"
                 >
                   Login
                 </Link>
-              )}
-
-              {/* Mobile Theme */}
-              {mounted && (
-                <button
-                  onClick={toggleTheme}
-                  className="flex items-center justify-center gap-2 px-4 py-3 border rounded-xl dark:border-gray-600"
-                >
-                  {theme === "dark" ? (
-                    <>
-                      <BsSun className="text-yellow-400" />
-                      Light Mode
-                    </>
-                  ) : (
-                    <>
-                      <BsMoonStars />
-                      Dark Mode
-                    </>
-                  )}
-                </button>
               )}
             </div>
           </div>

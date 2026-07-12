@@ -1,4 +1,6 @@
+import CTASection from "./Components/Action";
 import BannerPage from "./Components/Banner";
+import FAQSection from "./Components/Faqsection";
 import NewsletterSection from "./Components/NewsLetter";
 import ServicesSection from "./Components/Services";
 import StatisticsSection from "./Components/Statistic";
@@ -11,8 +13,12 @@ export default function Home() {
    <BannerPage></BannerPage>
    <ServicesSection></ServicesSection>
    <StatisticsSection></StatisticsSection>
-   <NewsletterSection></NewsletterSection>
+   
+   
+   <CTASection></CTASection>
    <TestimonialsSection></TestimonialsSection>
+   <FAQSection></FAQSection>
+   <NewsletterSection></NewsletterSection>
 
    </>
   );
