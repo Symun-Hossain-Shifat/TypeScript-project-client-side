@@ -1,6 +1,8 @@
-import GetProducts from "@/lib/Actions/GetProduct";
+
 import Link from "next/link";
 import ProductImage from "../Components/productimage";
+import { GetAllProducts } from "@/lib/Actions/GetProduct";
+
 
 interface Product {
   _id: string;
@@ -14,7 +16,7 @@ interface Product {
 }
 
 export default async function ProductGrid() {
-  const data: Product[] = await GetProducts();
+  const data: Product[] = await GetAllProducts()
 
   if (!data || data.length === 0) {
     return (

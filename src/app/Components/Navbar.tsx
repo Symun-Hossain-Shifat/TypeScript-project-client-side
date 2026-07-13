@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { IoMenu } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import { authClient } from "@/lib/auth-client";
+import { LogOut } from "lucide-react";
 
 interface NavLink {
   label: string;
@@ -109,9 +110,11 @@ export default function Navbarpage(): React.JSX.Element {
             {user ? (
               <button 
                 onClick={handleLogout} 
-                className="hidden md:block text-green-400 font-semibold hover:text-green-300 text-sm transition"
-              >
-                Logout
+                className="hidden md:flex items-center justify-center gap-1    text-[#f5f0e6]/80 hover:border-[#f5f0e6]/35 hover:text-[#f5f0e6]  text-sm transition"
+              > 
+             
+                Logout 
+                 <LogOut className="h-4 w-4" strokeWidth={2} />
               </button>
             ) : (
               <Link

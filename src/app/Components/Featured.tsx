@@ -1,6 +1,7 @@
-import GetProducts from "@/lib/Actions/GetProduct";
+
 import Link from "next/link";
 import ProductImage from "../Components/productimage";
+import { GetAllProducts } from "@/lib/Actions/GetProduct";
 
 interface Product {
   _id: string;
@@ -15,7 +16,8 @@ interface Product {
 
 export default async function FeaturedSection() {
   // Fetch products and safe guard against null/undefined results
-  const products = await GetProducts();
+  const products = await GetAllProducts()
+  console.log(products) 
   const data: Product[] = products ? products.slice(0, 4) : [];
 
   if (!data || data.length === 0) {
