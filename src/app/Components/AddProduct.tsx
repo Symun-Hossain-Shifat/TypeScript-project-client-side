@@ -1,6 +1,10 @@
 "use client";
 
+import PostProduct from "@/lib/Actions/PostProduct";
+
+import { redirect } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
+import toast from "react-hot-toast";
 
 interface ItemFormData {
   title: string;
@@ -30,21 +34,18 @@ export default function AddItemForm() {
     }));
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+ const handleSubmit = async (
+  e: FormEvent<HTMLFormElement>
+): Promise<void> => {
+  e.preventDefault();
 
-    console.log(formData);
-
-    // TODO: API Call Here
-
-    setFormData({
-      title: "",
-      shortDescription: "",
-      description: "",
-      price: "",
-      image: "",
-    });
-  };
+ const result = await PostProduct(formData)
+ console.log(result)
+ if(result){
+  toast.success('Product Published Successfully')
+  redirect('/Dashboard/User')
+ }
+};
 
   return (
     <div className="min-h-screen bg-black py-12">
