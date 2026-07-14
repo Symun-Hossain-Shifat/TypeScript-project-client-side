@@ -54,7 +54,7 @@ export default function SideNavigation({ Userinfo }: SideNavigationProps) {
   const AdminNavItems: NavItem[] = [
     { href: "/Dashboard/Admin", icon: BsHouse, label: "Overview" },
    
-    { href: "/Dashboard/Admin/Recipes", icon: FiBookOpen, label: "Manage Recipes" },
+    { href: "/Dashboard/Admin/Manageproduct", icon: FiBookOpen, label: "Manage Product" },
    
     { href: "/Dashboard/Admin/profile", icon: BsPerson, label: "Profile" },
   ];

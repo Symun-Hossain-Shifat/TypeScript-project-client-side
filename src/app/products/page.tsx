@@ -2,6 +2,7 @@
 import Link from "next/link";
 import ProductImage from "../Components/productimage";
 import { GetAllProducts } from "@/lib/Actions/GetProduct";
+import {Description, Label, ListBox, Select} from "@heroui/react";
 
 
 interface Product {
@@ -27,7 +28,47 @@ export default async function ProductGrid() {
   }
 
   return (
-    <div className="mx-auto my-10 grid max-w-7xl grid-cols-1 gap-6 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
+    <>
+      {/* <div className="w-10/11 mx-auto flex items-center justify-between">
+         <Select className="w-[256px]" placeholder="Select one">
+      <Label>State</Label>
+      <Select.Trigger>
+        <Select.Value />
+        <Select.Indicator />
+      </Select.Trigger>
+      <Select.Popover>
+        <ListBox>
+          <ListBox.Item id="florida" textValue="Florida">
+            Florida
+            <ListBox.ItemIndicator />
+          </ListBox.Item>
+          <ListBox.Item id="delaware" textValue="Delaware">
+            Delaware
+            <ListBox.ItemIndicator />
+          </ListBox.Item>
+          <ListBox.Item id="california" textValue="California">
+            California
+            <ListBox.ItemIndicator />
+          </ListBox.Item>
+          <ListBox.Item id="texas" textValue="Texas">
+            Texas
+            <ListBox.ItemIndicator />
+          </ListBox.Item>
+          <ListBox.Item id="new-york" textValue="New York">
+            New York
+            <ListBox.ItemIndicator />
+          </ListBox.Item>
+          <ListBox.Item id="washington" textValue="Washington">
+            Washington
+            <ListBox.ItemIndicator />
+          </ListBox.Item>
+        </ListBox>
+      </Select.Popover>
+      <Description>Select your state of residence</Description>
+    </Select>
+      </div> */}
+      <div className="mx-auto my-10 grid max-w-7xl grid-cols-1 gap-6 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
+    
       {data.map((product) => (
         <div
           key={product._id}
@@ -77,5 +118,7 @@ export default async function ProductGrid() {
         </div>
       ))}
     </div>
+    </>
+    
   );
 }
