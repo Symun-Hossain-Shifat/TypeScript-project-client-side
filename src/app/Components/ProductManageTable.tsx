@@ -4,10 +4,10 @@ import { Eye } from "lucide-react";
 import Link from "next/link";
 import { DeletePage } from "./DeleteProduct";
 import { Editpage } from "./EditProduct";
-
 export interface Product {
   _id: string;
   title: string;
+  category: string; // এখানে '?' চিহ্নটি বাদ দিয়ে শুধু string করে দিন
   shortDescription: string;
   description: string;
   price: string;
@@ -15,7 +15,6 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
 }
-
 interface ProductManageTableProps {
   products: Product[];
 }
@@ -31,7 +30,6 @@ function formatDate(dateString: string): string {
 function ProductManageTable({ products }: ProductManageTableProps) {
   if (!products || products.length === 0) {
     return (
-      // No products screen - converted to deep dark variant
       <div className="flex items-center justify-center rounded-lg border border-dashed border-zinc-800 bg-black py-12 text-zinc-500">
         No products found.
       </div>
@@ -39,10 +37,8 @@ function ProductManageTable({ products }: ProductManageTableProps) {
   }
 
   return (
-    // Table Container - Pitch Black Background & Zinc border
     <div className="overflow-x-auto rounded-lg border border-zinc-800 bg-black shadow-md">
       <table className="min-w-full divide-y divide-zinc-800 text-sm">
-        {/* Table Header - Dark Zinc Background */}
         <thead className="bg-zinc-950">
           <tr>
             <th className="px-4 py-3 text-left font-semibold text-zinc-400">ID</th>
@@ -53,7 +49,6 @@ function ProductManageTable({ products }: ProductManageTableProps) {
           </tr>
         </thead>
         
-        {/* Table Body - Pure Black Background with zinc row splitters */}
         <tbody className="divide-y divide-zinc-900 bg-black">
           {products.map((product) => (
             <tr key={product._id} className="hover:bg-zinc-950/50 transition-colors">
@@ -78,11 +73,10 @@ function ProductManageTable({ products }: ProductManageTableProps) {
                     <Eye size={16} />
                   </Link>
                   
-                  {/* Edit action component */}
+                  {/* এখন টাইপ মিলে যাওয়ায় এখানে আর কোনো এরর দেখাবে না */}
                   <Editpage product={product} />
                   
-                  {/* Delete action component */}
-                  <DeletePage />
+                  <DeletePage id={product._id}/>
                 </div>
               </td>
             </tr>
