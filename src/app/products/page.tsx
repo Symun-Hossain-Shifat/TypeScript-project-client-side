@@ -18,7 +18,7 @@ interface Product {
 
 export default async function ProductGrid() {
   const data: Product[] = await GetAllProducts()
-
+  console.log(data)
   if (!data || data.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-gray-400">

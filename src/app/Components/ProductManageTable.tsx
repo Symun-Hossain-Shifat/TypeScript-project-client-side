@@ -1,6 +1,9 @@
-'use client'
-import { Eye, Pencil, Trash2 } from "lucide-react";
+'use client';
+
+import { Eye } from "lucide-react";
 import Link from "next/link";
+import { DeletePage } from "./DeleteProduct";
+import { Editpage } from "./EditProduct";
 
 export interface Product {
   _id: string;
@@ -15,9 +18,6 @@ export interface Product {
 
 interface ProductManageTableProps {
   products: Product[];
-  onView?: (product: Product) => void;
-  onEdit?: (product: Product) => void;
-  onDelete?: (product: Product) => void;
 }
 
 function formatDate(dateString: string): string {
@@ -28,81 +28,61 @@ function formatDate(dateString: string): string {
   });
 }
 
-function ProductManageTable({
-  products,
-  onView,
-  onEdit,
-  onDelete,
-}: ProductManageTableProps) {
+function ProductManageTable({ products }: ProductManageTableProps) {
   if (!products || products.length === 0) {
     return (
-      <div className="flex items-center justify-center rounded-lg border border-dashed border-gray-300 py-12 text-gray-500">
+      // No products screen - converted to deep dark variant
+      <div className="flex items-center justify-center rounded-lg border border-dashed border-zinc-800 bg-black py-12 text-zinc-500">
         No products found.
       </div>
     );
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
-      <table className="min-w-full divide-y divide-gray-200 text-sm">
-        <thead className="bg-gray-50">
+    // Table Container - Pitch Black Background & Zinc border
+    <div className="overflow-x-auto rounded-lg border border-zinc-800 bg-black shadow-md">
+      <table className="min-w-full divide-y divide-zinc-800 text-sm">
+        {/* Table Header - Dark Zinc Background */}
+        <thead className="bg-zinc-950">
           <tr>
-            <th className="px-4 py-3 text-left font-semibold text-gray-600">
-              ID
-            </th>
-            <th className="px-4 py-3 text-left font-semibold text-gray-600">
-              Title
-            </th>
-            <th className="px-4 py-3 text-left font-semibold text-gray-600">
-              Price
-            </th>
-            <th className="px-4 py-3 text-left font-semibold text-gray-600">
-              Created At
-            </th>
-            <th className="px-4 py-3 text-right font-semibold text-gray-600">
-              Actions
-            </th>
+            <th className="px-4 py-3 text-left font-semibold text-zinc-400">ID</th>
+            <th className="px-4 py-3 text-left font-semibold text-zinc-400">Title</th>
+            <th className="px-4 py-3 text-left font-semibold text-zinc-400">Price</th>
+            <th className="px-4 py-3 text-left font-semibold text-zinc-400">Created At</th>
+            <th className="px-4 py-3 text-right font-semibold text-zinc-400">Actions</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100 bg-white">
+        
+        {/* Table Body - Pure Black Background with zinc row splitters */}
+        <tbody className="divide-y divide-zinc-900 bg-black">
           {products.map((product) => (
-            <tr key={product._id} className="hover:bg-gray-50">
-              <td className="max-w-[120px] truncate px-4 py-3 text-gray-500">
+            <tr key={product._id} className="hover:bg-zinc-950/50 transition-colors">
+              <td className="max-w-[120px] truncate px-4 py-3 text-zinc-500">
                 {product._id}
               </td>
-              <td className="px-4 py-3 font-medium text-gray-900">
+              <td className="px-4 py-3 font-medium text-white">
                 {product.title}
               </td>
-              <td className="px-4 py-3 text-gray-700">${product.price}</td>
-              <td className="px-4 py-3 text-gray-500">
+              <td className="px-4 py-3 text-zinc-300">
+                ${product.price}
+              </td>
+              <td className="px-4 py-3 text-zinc-400">
                 {formatDate(product.createdAt)}
               </td>
               <td className="px-4 py-3">
                 <div className="flex items-center justify-end gap-2">
                   <Link
                     href={`/products/${product._id}`}
-                    
-                    className="rounded-md p-2 text-gray-500 hover:bg-blue-50 hover:text-blue-600"
-                    
+                    className="rounded-md p-2 text-zinc-400 hover:bg-zinc-900 hover:text-white transition-colors"
                   >
                     <Eye size={16} />
                   </Link>
-                  <button
-                    type="button"
-                    onClick={() => onEdit?.(product)}
-                    className="rounded-md p-2 text-gray-500 hover:bg-amber-50 hover:text-amber-600"
-                    aria-label="Edit product"
-                  >
-                    <Pencil size={16} />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onDelete?.(product)}
-                    className="rounded-md p-2 text-gray-500 hover:bg-red-50 hover:text-red-600"
-                    aria-label="Delete product"
-                  >
-                    <Trash2 size={16} />
-                  </button>
+                  
+                  {/* Edit action component */}
+                  <Editpage product={product} />
+                  
+                  {/* Delete action component */}
+                  <DeletePage />
                 </div>
               </td>
             </tr>

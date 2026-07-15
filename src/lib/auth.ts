@@ -1,14 +1,23 @@
+import { MongoClient } from "mongodb";
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import { MongoClient } from "mongodb";
 
 const mongoUrl = process.env.MONGODB_URL;
 
 if (!mongoUrl) {
-  throw new Error("MONGODB_URL is not defined in environment variables.");
+  throw new Error("MONGODB_URL is not defined.");
 }
 
-const client = new MongoClient(mongoUrl);
+const globalForMongo = global as typeof globalThis & {
+  mongoClient?: MongoClient;
+};
+
+const client =
+  globalForMongo.mongoClient ?? new MongoClient(mongoUrl);
+
+if (process.env.NODE_ENV !== "production") {
+  globalForMongo.mongoClient = client;
+}
 
 await client.connect();
 
