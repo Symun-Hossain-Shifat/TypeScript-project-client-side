@@ -1,3 +1,4 @@
+import { authHeader } from "./GetToken";
 
 
 
@@ -12,8 +13,10 @@ export const DeleteProduct = async (id: string): Promise<DeleteResponse> => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_SERVER_URI}/api/products/${id}`,
     {
-      method: "DELETE", 
-     
+      method: "DELETE",
+      headers: {
+        ...(await authHeader()),
+      },
     }
   );
 

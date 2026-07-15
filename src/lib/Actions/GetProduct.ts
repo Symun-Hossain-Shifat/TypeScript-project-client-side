@@ -1,9 +1,12 @@
+
+
 const URL = process.env.NEXT_PUBLIC_SERVER_URI;
 
 
 export const GetAllProducts = async () => {
   const res = await fetch(`${URL}/api/products`, {
     cache: "no-store",
+      
   });
 
   if (!res.ok) {
@@ -36,4 +39,30 @@ export const GetSpecificProduct = async (id: string) => {
    const result = await res.json();
 
   return result.data; 
+};
+
+export const GetSpecificProductbyauthoremail = async (authoremail: string) => {
+  try {
+    const res = await fetch(`${URL}/api/products?authoremail=${authoremail}`, {
+      cache: "no-store",
+    });
+
+    
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error(`Backend Error Status: ${res.status}`);
+      console.error(`Backend Error Message: ${errorText}`);
+
+     
+      return []; 
+    }
+
+    const result = await res.json();
+    return result.data || [];
+
+  } catch (error) {
+    
+    console.error("Network or parsing error in GetSpecificProductbyauthoremail:", error);
+    return []; 
+  }
 };

@@ -27,7 +27,7 @@ function formatDate(dateString: string): string {
   });
 }
 
-function ProductManageTable({ products }: ProductManageTableProps) {
+function ProductManageTableuser({ products }: ProductManageTableProps) {
   if (!products || products.length === 0) {
     return (
       <div className="flex items-center justify-center rounded-lg border border-dashed border-zinc-800 bg-black py-12 text-zinc-500">
@@ -73,10 +73,7 @@ function ProductManageTable({ products }: ProductManageTableProps) {
                     <Eye size={16} />
                   </Link>
                   
-                
-                  <Editpage product={product} />
-                  
-                  <DeletePage id={product._id}/>
+                 
                 </div>
               </td>
             </tr>
@@ -87,4 +84,4 @@ function ProductManageTable({ products }: ProductManageTableProps) {
   );
 }
 
-export default ProductManageTable;
+export default ProductManageTableuser;

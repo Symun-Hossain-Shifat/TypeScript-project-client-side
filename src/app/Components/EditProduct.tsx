@@ -44,7 +44,7 @@ const CATEGORIES = [
 export function Editpage({ product }: EditProductModalProps) {
   const router = useRouter();
   const [isUpdating, setIsUpdating] = useState(false);
-
+  
   const [formData, setFormData] = useState<ProductFormData>({
     title: product.title,
     category: product.category || "", 
@@ -89,7 +89,7 @@ export function Editpage({ product }: EditProductModalProps) {
 
     try {
       const result = await Editproduct(Data, id);
-      
+      console.log(result)
       if (result) {
         toast.success('Product Updated Successfully 🎉');
         closeModal(); 

@@ -1,3 +1,5 @@
+import { authHeader } from "./GetToken";
+
 interface Product {
   title: string;
   shortDescription: string;
@@ -15,6 +17,7 @@ const PostProduct = async ( formData : Product) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+         ...await authHeader() ,
       },
       body: JSON.stringify(formData),
     }

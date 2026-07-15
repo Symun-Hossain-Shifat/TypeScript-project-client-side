@@ -1,3 +1,5 @@
+import { authHeader } from "./GetToken";
+
 // Product Interface
 interface Product {
   title: string ,
@@ -17,7 +19,7 @@ export const Editproduct = async ( Data : Product , id : string ) => {
     {
       method: "PATCH",
       headers: { 
-       
+         ...await authHeader() ,
         "content-type": "application/json" , 
        
          

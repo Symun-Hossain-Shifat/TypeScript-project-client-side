@@ -17,7 +17,7 @@ interface Product {
 export default async function FeaturedSection() {
   // Fetch products and safe guard against null/undefined results
   const products = await GetAllProducts()
-  console.log(products) 
+  // console.log(products) 
   const data: Product[] = products ? products.slice(0, 4) : [];
 
   if (!data || data.length === 0) {

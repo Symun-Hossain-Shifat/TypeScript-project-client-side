@@ -84,15 +84,6 @@ if (data?.user) {
             </p>
           </div>
 
-          {/* Social Logins */}
-          <div className="grid grid-cols-2 gap-3 mb-6">
-            <button className="flex items-center justify-center gap-2 border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-[#0B2545] py-3 px-4 rounded-xl shadow-sm transition-all active:scale-95">
-              <span>🌐</span> Google
-            </button>
-            <button className="flex items-center justify-center gap-2 border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-[#0B2545] py-3 px-4 rounded-xl shadow-sm transition-all active:scale-95">
-              <span>🔵</span> Facebook
-            </button>
-          </div>
 
           {/* Divider */}
           <div className="flex items-center my-6">

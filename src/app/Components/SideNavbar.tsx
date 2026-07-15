@@ -33,7 +33,7 @@ interface NavItem {
   icon: IconType;
 }
 
-export default function SideNavigation({ Userinfo }: SideNavigationProps) {
+export default function SideNavbar({ Userinfo }: SideNavigationProps) {
   const pathname = usePathname();
   const user = Userinfo;
 
@@ -42,7 +42,9 @@ export default function SideNavigation({ Userinfo }: SideNavigationProps) {
   const UserNavItems: NavItem[] = [
     { href: "/Dashboard/User", icon: BsHouse, label: "Overview" },
     { href: "/Dashboard/User/product", icon: BiPlusCircle, label: "Add Product" },
+    { href: "/Dashboard/User/ManageProduct", icon: FiBookOpen, label: "Manage Product" } ,
     { href: "/Dashboard/User/profile", icon: BsPerson, label: "Profile" },
+     
   ];
 
   const AdminNavItems: NavItem[] = [
